@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['yesno_0',['yesno',['../d8/d6c/classob_1_1core_1_1_yes_no.html#a371a56fb9a79a0aaa98688a48cbf86e6',1,'ob::core::YesNo::YesNo() noexcept=default'],['../d8/d6c/classob_1_1core_1_1_yes_no.html#aee5825a303ddc5f0fcb242634ff4d7c3',1,'ob::core::YesNo::YesNo(bool yesNo) noexcept'],['../d8/d6c/classob_1_1core_1_1_yes_no.html#ab477af33d5403058222f707de4820c2d',1,'ob::core::YesNo::YesNo(Helper helper) noexcept']]],
-  ['yieldthread_1',['YieldThread',['../d0/d0f/classob_1_1core_1_1_thread.html#a28c7ae19e16bf5c126375d2933ec40fa',1,'ob::core::Thread']]]
+  ['xml_0',['xml',['../d8/dec/classob_1_1core_1_1_xml.html#a3719fa0ad656f239c766ec421dcfb1fc',1,'ob::core::Xml::Xml()'],['../d8/dec/classob_1_1core_1_1_xml.html#a1b7f08b25cc84b855386acfa917ba6d8',1,'ob::core::Xml::Xml(StringView path)']]],
+  ['xmlexception_1',['xmlexception',['../dd/d9f/classob_1_1core_1_1_xml_exception.html#acf8ab3fd0eef130af10d5a4a8a2093b8',1,'ob::core::XmlException::XmlException()'],['../dd/d9f/classob_1_1core_1_1_xml_exception.html#a0fc55c994f5c4840c730eee15b90a0b7',1,'ob::core::XmlException::XmlException(StringView message)'],['../dd/d9f/classob_1_1core_1_1_xml_exception.html#abfe4fb27c02b96ac8c24d82badf55d8b',1,'ob::core::XmlException::XmlException(StringView message, s32 line, s32 column)']]],
+  ['xmlnode_2',['xmlnode',['../d2/dfd/classob_1_1core_1_1_xml_node.html#ac53c809f093db10c837f34e103513334',1,'ob::core::XmlNode::XmlNode()=default'],['../d2/dfd/classob_1_1core_1_1_xml_node.html#a9b1945e6a78e9e141a0b5492c9f8b7a3',1,'ob::core::XmlNode::XmlNode(StringView name)'],['../d2/dfd/classob_1_1core_1_1_xml_node.html#a8cc1d33cee971ce1d765f1c3246d3251',1,'ob::core::XmlNode::XmlNode(StringView name, Map&lt; String, String &gt; attributes)']]]
 ];

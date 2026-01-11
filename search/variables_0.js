@@ -12,5 +12,5 @@ var searchData=
   ['alphaop_9',['alphaOp',['../d5/daa/structob_1_1rhi_1_1_blend_desc.html#aee3ee203920fbcab7c85d8568aa168e2',1,'ob::rhi::BlendDesc']]],
   ['anisotropy_10',['anisotropy',['../d7/d83/structob_1_1rhi_1_1_sampler_desc.html#a2391fd7e51b60b0b0f5028f832f502fe',1,'ob::rhi::SamplerDesc']]],
   ['arraynum_11',['arrayNum',['../d7/d26/structob_1_1rhi_1_1_texture_desc.html#ab86128fb84674036f1c5b6568749637a',1,'ob::rhi::TextureDesc']]],
-  ['attributes_12',['attributes',['../da/de2/structob_1_1rhi_1_1_vertex_layout.html#a43afadeef2c33a50e79a637fe8d42764',1,'ob::rhi::VertexLayout']]]
+  ['attributes_12',['attributes',['../d2/dfd/classob_1_1core_1_1_xml_node.html#a9c6ae536255f8a22a11d957ab96dc892',1,'ob::core::XmlNode::attributes'],['../da/de2/structob_1_1rhi_1_1_vertex_layout.html#a43afadeef2c33a50e79a637fe8d42764',1,'ob::rhi::VertexLayout::attributes']]]
 ];

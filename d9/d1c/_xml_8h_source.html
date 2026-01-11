@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: Runtime/Core/Public/Framework/Core/File/Xml.h ソースファイル</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(1); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d9/d1c/_xml_8h_source.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Xml.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;Framework/Core/CorePrivate.h&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/Core/Exception/Exception.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span>ob::core {</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="foldopen" id="foldopen00012" data-start="{" data-end="};">
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html">   12</a></span>    <span class="keyword">class </span>OB_API <a class="code hl_class" href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html">XmlException</a> : <span class="keyword">public</span> <a class="code hl_class" href="../../d3/d5e/classob_1_1core_1_1_exception.html">Exception</a> {</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html#acf8ab3fd0eef130af10d5a4a8a2093b8">   15</a></span>        <a class="code hl_function" href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html#acf8ab3fd0eef130af10d5a4a8a2093b8">XmlException</a>() : <a class="code hl_class" href="../../d3/d5e/classob_1_1core_1_1_exception.html">Exception</a>(), m_line(-1), m_column(-1) {}</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html#a0fc55c994f5c4840c730eee15b90a0b7">   18</a></span>        <a class="code hl_function" href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html#a0fc55c994f5c4840c730eee15b90a0b7">XmlException</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> message) : <a class="code hl_class" href="../../d3/d5e/classob_1_1core_1_1_exception.html">Exception</a>(message), m_line(-1), m_column(-1) {}</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="foldopen" id="foldopen00021" data-start="{" data-end="}">
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html#abfe4fb27c02b96ac8c24d82badf55d8b">   21</a></span>        <a class="code hl_function" href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html#abfe4fb27c02b96ac8c24d82badf55d8b">XmlException</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> message, <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> line, <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> column)</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>            : <a class="code hl_class" href="../../d3/d5e/classob_1_1core_1_1_exception.html">Exception</a>(message), m_line(line), m_column(column) {}</div>
+</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html#ae44540c0224d18165500a8b4a6ea7d03">   25</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> <a class="code hl_function" href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html#ae44540c0224d18165500a8b4a6ea7d03">line</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_line; }</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html#ab3e168416c486e380b505b9238e1cc8a">   28</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> <a class="code hl_function" href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html#ab3e168416c486e380b505b9238e1cc8a">column</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_column; }</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> m_line;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> m_column;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    };</div>
+</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="foldopen" id="foldopen00042" data-start="{" data-end="};">
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html">   42</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html">XmlNode</a> {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a76d3cf6a1bfee2043ab3b022dd023876">   44</a></span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> <a class="code hl_variable" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a76d3cf6a1bfee2043ab3b022dd023876">name</a>;                            </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a9c6ae536255f8a22a11d957ab96dc892">   45</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Map&lt;String, String&gt;</a> <a class="code hl_variable" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a9c6ae536255f8a22a11d957ab96dc892">attributes</a>;         </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#afb98e482aff63828224f0c29fe5938bd">   46</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Vector&lt;XmlNode&gt;</a> <a class="code hl_variable" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#afb98e482aff63828224f0c29fe5938bd">children</a>;               </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#ac53c809f093db10c837f34e103513334">   50</a></span>        <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#ac53c809f093db10c837f34e103513334">XmlNode</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a9b1945e6a78e9e141a0b5492c9f8b7a3">   54</a></span>        <span class="keyword">explicit</span> <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a9b1945e6a78e9e141a0b5492c9f8b7a3">XmlNode</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> <a class="code hl_variable" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a76d3cf6a1bfee2043ab3b022dd023876">name</a>);</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a8cc1d33cee971ce1d765f1c3246d3251">   59</a></span>        <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a8cc1d33cee971ce1d765f1c3246d3251">XmlNode</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> <a class="code hl_variable" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a76d3cf6a1bfee2043ab3b022dd023876">name</a>, <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Map&lt;String, String&gt;</a> <a class="code hl_variable" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a9c6ae536255f8a22a11d957ab96dc892">attributes</a>);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a8eba36bf0d731418aeb50b9987dd12ae">   65</a></span>        <a class="code hl_class" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html">XmlNode</a>&amp; <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a8eba36bf0d731418aeb50b9987dd12ae">at</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> <a class="code hl_variable" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a76d3cf6a1bfee2043ab3b022dd023876">name</a>);</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="keyword">const</span> <a class="code hl_class" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html">XmlNode</a>&amp; <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a8eba36bf0d731418aeb50b9987dd12ae">at</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> <a class="code hl_variable" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a76d3cf6a1bfee2043ab3b022dd023876">name</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#aa99cd35a50647524672187fb70294863">   73</a></span>        <a class="code hl_class" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html">XmlNode</a>&amp; <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#aa99cd35a50647524672187fb70294863">at</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> <a class="code hl_variable" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a76d3cf6a1bfee2043ab3b022dd023876">name</a>, <span class="keywordtype">size_t</span> index);</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        <span class="keyword">const</span> <a class="code hl_class" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html">XmlNode</a>&amp; <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a8eba36bf0d731418aeb50b9987dd12ae">at</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> <a class="code hl_variable" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a76d3cf6a1bfee2043ab3b022dd023876">name</a>, <span class="keywordtype">size_t</span> index) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#af6179e757f13ab6329c95c15c22eb6fa">   79</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#af6179e757f13ab6329c95c15c22eb6fa">has</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> <a class="code hl_variable" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a76d3cf6a1bfee2043ab3b022dd023876">name</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a16dcc830f1bcac2ff78ee401d5a176e2">   84</a></span>        <span class="keywordtype">size_t</span> <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a16dcc830f1bcac2ff78ee401d5a176e2">count</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> <a class="code hl_variable" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a76d3cf6a1bfee2043ab3b022dd023876">name</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a785372957a40dafc716a224537803671">   89</a></span>        <a class="code hl_class" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html">XmlNode</a>&amp; <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a785372957a40dafc716a224537803671">add</a>(<a class="code hl_class" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html">XmlNode</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">child</a>);</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a732d240726335c8b1948066e06384692">   94</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a732d240726335c8b1948066e06384692">remove</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> <a class="code hl_variable" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a76d3cf6a1bfee2043ab3b022dd023876">name</a>);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#ae217a4d3579a0e0cc8b5e001fda08268">  100</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#ae217a4d3579a0e0cc8b5e001fda08268">remove</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> <a class="code hl_variable" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a76d3cf6a1bfee2043ab3b022dd023876">name</a>, <span class="keywordtype">size_t</span> index);</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a5c691b6d732711544b782eac1e067e0e">  105</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a5c691b6d732711544b782eac1e067e0e">has_attr</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> key) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#afc3da5644912544f385d14e2d79dfc47">  110</a></span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>&amp; <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#afc3da5644912544f385d14e2d79dfc47">attr</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> key);</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a125c3c42cac6737473e4f9c78dc85fa4">  115</a></span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a125c3c42cac6737473e4f9c78dc85fa4">attr</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> key) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a744c3196dd5eb6f22b85d9fd8033dea7">  121</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a744c3196dd5eb6f22b85d9fd8033dea7">attr_int</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> key, <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">fallback</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#aa22f9658ac32db4173490ec1cecb8ea3">  126</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Optional&lt;s32&gt;</a> <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#aa22f9658ac32db4173490ec1cecb8ea3">attr_int</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> key) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a6958f9485053dd41777c180c6aeca4f2">  132</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">f32</a> <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a6958f9485053dd41777c180c6aeca4f2">attr_float</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> key, <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">f32</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">fallback</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a00f1b08f876b02079040fa9b3afc710b">  137</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Optional&lt;f32&gt;</a> <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a00f1b08f876b02079040fa9b3afc710b">attr_float</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> key) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a6e3d5a4b208267e2fe0e2f0258db7b8b">  144</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a6e3d5a4b208267e2fe0e2f0258db7b8b">attr_bool</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> key, <span class="keywordtype">bool</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">fallback</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a2105dcb41189c2f2d3c20c6573212d41">  149</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Optional&lt;bool&gt;</a> <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a2105dcb41189c2f2d3c20c6573212d41">attr_bool</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> key) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a5e9666907bcb6c24b8e40a9b8ec74ae7">  154</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a5e9666907bcb6c24b8e40a9b8ec74ae7">remove_attr</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> key);</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno"><a class="line" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a8f53ca42151ac7f656648489f31e1fb3">  159</a></span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> <a class="code hl_function" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a8f53ca42151ac7f656648489f31e1fb3">string</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">indent</a> = 0) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    };</div>
+</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span> </div>
+<div class="foldopen" id="foldopen00205" data-start="{" data-end="};">
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno"><a class="line" href="../../d8/dec/classob_1_1core_1_1_xml.html">  205</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d8/dec/classob_1_1core_1_1_xml.html">Xml</a> : <span class="keyword">public</span> <a class="code hl_class" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html">XmlNode</a> {</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno"><a class="line" href="../../d8/dec/classob_1_1core_1_1_xml.html#a3719fa0ad656f239c766ec421dcfb1fc">  208</a></span>        <a class="code hl_function" href="../../d8/dec/classob_1_1core_1_1_xml.html#a3719fa0ad656f239c766ec421dcfb1fc">Xml</a>();</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span> </div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno"><a class="line" href="../../d8/dec/classob_1_1core_1_1_xml.html#a1b7f08b25cc84b855386acfa917ba6d8">  212</a></span>        <span class="keyword">explicit</span> <a class="code hl_function" href="../../d8/dec/classob_1_1core_1_1_xml.html#a1b7f08b25cc84b855386acfa917ba6d8">Xml</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> path);</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span> </div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno"><a class="line" href="../../d8/dec/classob_1_1core_1_1_xml.html#af38fe0fc155d2eac477c27662cc848f3">  217</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d8/dec/classob_1_1core_1_1_xml.html#af38fe0fc155d2eac477c27662cc848f3">load</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> path);</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span> </div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno"><a class="line" href="../../d8/dec/classob_1_1core_1_1_xml.html#a383ab4ad69db295e08700188c3add063">  222</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d8/dec/classob_1_1core_1_1_xml.html#a383ab4ad69db295e08700188c3add063">save</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> path = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span> </div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno"><a class="line" href="../../d8/dec/classob_1_1core_1_1_xml.html#a02dbc498b8fbbfc240de5c6c3298ecdb">  227</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d8/dec/classob_1_1core_1_1_xml.html#a02dbc498b8fbbfc240de5c6c3298ecdb">parse</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">text</a>);</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno"><a class="line" href="../../d8/dec/classob_1_1core_1_1_xml.html#ad475a84414ca085c15c5e02f050f0558">  232</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d8/dec/classob_1_1core_1_1_xml.html#ad475a84414ca085c15c5e02f050f0558">exists</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> path) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span> </div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno"><a class="line" href="../../d8/dec/classob_1_1core_1_1_xml.html#a847dae61f637d4d7aa2e50d5c9e96416">  237</a></span>        <a class="code hl_class" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html">XmlNode</a>* <a class="code hl_function" href="../../d8/dec/classob_1_1core_1_1_xml.html#a847dae61f637d4d7aa2e50d5c9e96416">find</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> path);</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>        <span class="keyword">const</span> <a class="code hl_class" href="../../d2/dfd/classob_1_1core_1_1_xml_node.html">XmlNode</a>* <a class="code hl_function" href="../../d8/dec/classob_1_1core_1_1_xml.html#a847dae61f637d4d7aa2e50d5c9e96416">find</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> path) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> m_path;</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    };</div>
+</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span> </div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>}</div>
+<div class="ttc" id="aclassob_1_1core_1_1_exception_html"><div class="ttname"><a href="../../d3/d5e/classob_1_1core_1_1_exception.html">ob::core::Exception</a></div><div class="ttdoc">例外クラス</div><div class="ttdef"><b>Definition</b> Exception.h:16</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_string_base_html"><div class="ttname"><a href="../../da/dc1/classob_1_1core_1_1_string_base.html">ob::core::StringBase&lt; Char &gt;</a></div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_exception_html"><div class="ttname"><a href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html">ob::core::XmlException</a></div><div class="ttdoc">XMLパースエラーに対する例外クラス</div><div class="ttdef"><b>Definition</b> Xml.h:12</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_exception_html_a0fc55c994f5c4840c730eee15b90a0b7"><div class="ttname"><a href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html#a0fc55c994f5c4840c730eee15b90a0b7">ob::core::XmlException::XmlException</a></div><div class="ttdeci">XmlException(StringView message)</div><div class="ttdoc">メッセージを指定して生成</div><div class="ttdef"><b>Definition</b> Xml.h:18</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_exception_html_ab3e168416c486e380b505b9238e1cc8a"><div class="ttname"><a href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html#ab3e168416c486e380b505b9238e1cc8a">ob::core::XmlException::column</a></div><div class="ttdeci">s32 column() const</div><div class="ttdoc">エラー発生列番号（パースエラー時）</div><div class="ttdef"><b>Definition</b> Xml.h:28</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_exception_html_abfe4fb27c02b96ac8c24d82badf55d8b"><div class="ttname"><a href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html#abfe4fb27c02b96ac8c24d82badf55d8b">ob::core::XmlException::XmlException</a></div><div class="ttdeci">XmlException(StringView message, s32 line, s32 column)</div><div class="ttdoc">メッセージと位置情報を指定して生成</div><div class="ttdef"><b>Definition</b> Xml.h:21</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_exception_html_acf8ab3fd0eef130af10d5a4a8a2093b8"><div class="ttname"><a href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html#acf8ab3fd0eef130af10d5a4a8a2093b8">ob::core::XmlException::XmlException</a></div><div class="ttdeci">XmlException()</div><div class="ttdoc">デフォルトコンストラクタ</div><div class="ttdef"><b>Definition</b> Xml.h:15</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_exception_html_ae44540c0224d18165500a8b4a6ea7d03"><div class="ttname"><a href="../../dd/d9f/classob_1_1core_1_1_xml_exception.html#ae44540c0224d18165500a8b4a6ea7d03">ob::core::XmlException::line</a></div><div class="ttdeci">s32 line() const</div><div class="ttdoc">エラー発生行番号（パースエラー時）</div><div class="ttdef"><b>Definition</b> Xml.h:25</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_html"><div class="ttname"><a href="../../d8/dec/classob_1_1core_1_1_xml.html">ob::core::Xml</a></div><div class="ttdoc">XMLドキュメント全体を表現するクラス</div><div class="ttdef"><b>Definition</b> Xml.h:205</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_html_a02dbc498b8fbbfc240de5c6c3298ecdb"><div class="ttname"><a href="../../d8/dec/classob_1_1core_1_1_xml.html#a02dbc498b8fbbfc240de5c6c3298ecdb">ob::core::Xml::parse</a></div><div class="ttdeci">bool parse(StringView text)</div><div class="ttdoc">文字列からXMLをパース</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_html_a1b7f08b25cc84b855386acfa917ba6d8"><div class="ttname"><a href="../../d8/dec/classob_1_1core_1_1_xml.html#a1b7f08b25cc84b855386acfa917ba6d8">ob::core::Xml::Xml</a></div><div class="ttdeci">Xml(StringView path)</div><div class="ttdoc">ファイルからロードして生成</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_html_a3719fa0ad656f239c766ec421dcfb1fc"><div class="ttname"><a href="../../d8/dec/classob_1_1core_1_1_xml.html#a3719fa0ad656f239c766ec421dcfb1fc">ob::core::Xml::Xml</a></div><div class="ttdeci">Xml()</div><div class="ttdoc">デフォルトコンストラクタ</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_html_a383ab4ad69db295e08700188c3add063"><div class="ttname"><a href="../../d8/dec/classob_1_1core_1_1_xml.html#a383ab4ad69db295e08700188c3add063">ob::core::Xml::save</a></div><div class="ttdeci">bool save(StringView path=&quot;&quot;)</div><div class="ttdoc">ファイルに保存</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_html_a847dae61f637d4d7aa2e50d5c9e96416"><div class="ttname"><a href="../../d8/dec/classob_1_1core_1_1_xml.html#a847dae61f637d4d7aa2e50d5c9e96416">ob::core::Xml::find</a></div><div class="ttdeci">XmlNode * find(StringView path)</div><div class="ttdoc">XPathサブセットでノードを検索</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_html_ad475a84414ca085c15c5e02f050f0558"><div class="ttname"><a href="../../d8/dec/classob_1_1core_1_1_xml.html#ad475a84414ca085c15c5e02f050f0558">ob::core::Xml::exists</a></div><div class="ttdeci">bool exists(StringView path) const</div><div class="ttdoc">XPathサブセットでノードが存在するか確認</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_html_af38fe0fc155d2eac477c27662cc848f3"><div class="ttname"><a href="../../d8/dec/classob_1_1core_1_1_xml.html#af38fe0fc155d2eac477c27662cc848f3">ob::core::Xml::load</a></div><div class="ttdeci">bool load(StringView path)</div><div class="ttdoc">ファイルから読み込み</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html">ob::core::XmlNode</a></div><div class="ttdoc">XMLの要素を表現するクラス</div><div class="ttdef"><b>Definition</b> Xml.h:42</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a00f1b08f876b02079040fa9b3afc710b"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a00f1b08f876b02079040fa9b3afc710b">ob::core::XmlNode::attr_float</a></div><div class="ttdeci">Optional&lt; f32 &gt; attr_float(StringView key) const</div><div class="ttdoc">属性値を浮動小数点数として取得（Optional版）</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a125c3c42cac6737473e4f9c78dc85fa4"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a125c3c42cac6737473e4f9c78dc85fa4">ob::core::XmlNode::attr</a></div><div class="ttdeci">String attr(StringView key) const</div><div class="ttdoc">属性値を取得（存在しない場合は空文字列）</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a16dcc830f1bcac2ff78ee401d5a176e2"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a16dcc830f1bcac2ff78ee401d5a176e2">ob::core::XmlNode::count</a></div><div class="ttdeci">size_t count(StringView name) const</div><div class="ttdoc">指定名の子ノード数を取得</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a2105dcb41189c2f2d3c20c6573212d41"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a2105dcb41189c2f2d3c20c6573212d41">ob::core::XmlNode::attr_bool</a></div><div class="ttdeci">Optional&lt; bool &gt; attr_bool(StringView key) const</div><div class="ttdoc">属性値を真偽値として取得（Optional版）</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a5c691b6d732711544b782eac1e067e0e"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a5c691b6d732711544b782eac1e067e0e">ob::core::XmlNode::has_attr</a></div><div class="ttdeci">bool has_attr(StringView key) const</div><div class="ttdoc">属性が存在するか確認</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a5e9666907bcb6c24b8e40a9b8ec74ae7"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a5e9666907bcb6c24b8e40a9b8ec74ae7">ob::core::XmlNode::remove_attr</a></div><div class="ttdeci">bool remove_attr(StringView key)</div><div class="ttdoc">属性を削除</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a6958f9485053dd41777c180c6aeca4f2"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a6958f9485053dd41777c180c6aeca4f2">ob::core::XmlNode::attr_float</a></div><div class="ttdeci">f32 attr_float(StringView key, f32 fallback) const</div><div class="ttdoc">属性値を浮動小数点数として取得</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a6e3d5a4b208267e2fe0e2f0258db7b8b"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a6e3d5a4b208267e2fe0e2f0258db7b8b">ob::core::XmlNode::attr_bool</a></div><div class="ttdeci">bool attr_bool(StringView key, bool fallback) const</div><div class="ttdoc">属性値を真偽値として取得</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a732d240726335c8b1948066e06384692"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a732d240726335c8b1948066e06384692">ob::core::XmlNode::remove</a></div><div class="ttdeci">bool remove(StringView name)</div><div class="ttdoc">子ノードを削除</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a744c3196dd5eb6f22b85d9fd8033dea7"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a744c3196dd5eb6f22b85d9fd8033dea7">ob::core::XmlNode::attr_int</a></div><div class="ttdeci">s32 attr_int(StringView key, s32 fallback) const</div><div class="ttdoc">属性値を整数として取得</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a76d3cf6a1bfee2043ab3b022dd023876"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a76d3cf6a1bfee2043ab3b022dd023876">ob::core::XmlNode::name</a></div><div class="ttdeci">String name</div><div class="ttdoc">要素名</div><div class="ttdef"><b>Definition</b> Xml.h:44</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a785372957a40dafc716a224537803671"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a785372957a40dafc716a224537803671">ob::core::XmlNode::add</a></div><div class="ttdeci">XmlNode &amp; add(XmlNode child)</div><div class="ttdoc">子ノードを追加</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a8cc1d33cee971ce1d765f1c3246d3251"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a8cc1d33cee971ce1d765f1c3246d3251">ob::core::XmlNode::XmlNode</a></div><div class="ttdeci">XmlNode(StringView name, Map&lt; String, String &gt; attributes)</div><div class="ttdoc">要素名と属性を指定して生成</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a8eba36bf0d731418aeb50b9987dd12ae"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a8eba36bf0d731418aeb50b9987dd12ae">ob::core::XmlNode::at</a></div><div class="ttdeci">XmlNode &amp; at(StringView name)</div><div class="ttdoc">名前を指定して子ノードにアクセス</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a8f53ca42151ac7f656648489f31e1fb3"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a8f53ca42151ac7f656648489f31e1fb3">ob::core::XmlNode::string</a></div><div class="ttdeci">String string(s32 indent=0) const</div><div class="ttdoc">XMLノードを整形済み文字列に変換</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a9b1945e6a78e9e141a0b5492c9f8b7a3"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a9b1945e6a78e9e141a0b5492c9f8b7a3">ob::core::XmlNode::XmlNode</a></div><div class="ttdeci">XmlNode(StringView name)</div><div class="ttdoc">要素名を指定して生成</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_a9c6ae536255f8a22a11d957ab96dc892"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#a9c6ae536255f8a22a11d957ab96dc892">ob::core::XmlNode::attributes</a></div><div class="ttdeci">Map&lt; String, String &gt; attributes</div><div class="ttdoc">属性のキーと値のペア</div><div class="ttdef"><b>Definition</b> Xml.h:45</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_aa22f9658ac32db4173490ec1cecb8ea3"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#aa22f9658ac32db4173490ec1cecb8ea3">ob::core::XmlNode::attr_int</a></div><div class="ttdeci">Optional&lt; s32 &gt; attr_int(StringView key) const</div><div class="ttdoc">属性値を整数として取得（Optional版）</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_aa99cd35a50647524672187fb70294863"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#aa99cd35a50647524672187fb70294863">ob::core::XmlNode::at</a></div><div class="ttdeci">XmlNode &amp; at(StringView name, size_t index)</div><div class="ttdoc">名前とインデックスを指定して子ノードにアクセス</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_ac53c809f093db10c837f34e103513334"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#ac53c809f093db10c837f34e103513334">ob::core::XmlNode::XmlNode</a></div><div class="ttdeci">XmlNode()=default</div><div class="ttdoc">デフォルトコンストラクタ</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_ae217a4d3579a0e0cc8b5e001fda08268"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#ae217a4d3579a0e0cc8b5e001fda08268">ob::core::XmlNode::remove</a></div><div class="ttdeci">bool remove(StringView name, size_t index)</div><div class="ttdoc">指定名・インデックスの子ノードを削除</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_af6179e757f13ab6329c95c15c22eb6fa"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#af6179e757f13ab6329c95c15c22eb6fa">ob::core::XmlNode::has</a></div><div class="ttdeci">bool has(StringView name) const</div><div class="ttdoc">子ノードが存在するか確認</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_afb98e482aff63828224f0c29fe5938bd"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#afb98e482aff63828224f0c29fe5938bd">ob::core::XmlNode::children</a></div><div class="ttdeci">Vector&lt; XmlNode &gt; children</div><div class="ttdoc">子ノードのリスト</div><div class="ttdef"><b>Definition</b> Xml.h:46</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_xml_node_html_afc3da5644912544f385d14e2d79dfc47"><div class="ttname"><a href="../../d2/dfd/classob_1_1core_1_1_xml_node.html#afc3da5644912544f385d14e2d79dfc47">ob::core::XmlNode::attr</a></div><div class="ttdeci">String &amp; attr(StringView key)</div><div class="ttdoc">属性値への参照を取得（存在しない場合は作成）</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../dir_7536b172fbd480bfd146a1b1acd6856b.html">Runtime</a></li><li class="navelem"><a class="el" href="../../dir_0e6cddcc9caa1238c7f3774224afaa45.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_ba49309ee78fabe0452662bc1a7ef37d.html">Public</a></li><li class="navelem"><a class="el" href="../../dir_36401868ad2ee673180e1aaa8510bbcc.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_e21e8c2e9eddca07fbbf2a4e213036d0.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_e923d218886efcd62dbb697d0b100ccd.html">File</a></li><li class="navelem"><b>Xml.h</b></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

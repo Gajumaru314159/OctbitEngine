@@ -232,6 +232,9 @@ var annotated_dup =
         [ "Vec3", "d0/dda/structob_1_1core_1_1_vec3.html", "d0/dda/structob_1_1core_1_1_vec3" ],
         [ "Vec4", "da/d24/structob_1_1core_1_1_vec4.html", "da/d24/structob_1_1core_1_1_vec4" ],
         [ "Viewport", "d0/d62/structob_1_1core_1_1_viewport.html", "d0/d62/structob_1_1core_1_1_viewport" ],
+        [ "Xml", "d8/dec/classob_1_1core_1_1_xml.html", "d8/dec/classob_1_1core_1_1_xml" ],
+        [ "XmlException", "dd/d9f/classob_1_1core_1_1_xml_exception.html", "dd/d9f/classob_1_1core_1_1_xml_exception" ],
+        [ "XmlNode", "d2/dfd/classob_1_1core_1_1_xml_node.html", "d2/dfd/classob_1_1core_1_1_xml_node" ],
         [ "YesNo", "d8/d6c/classob_1_1core_1_1_yes_no.html", "d8/d6c/classob_1_1core_1_1_yes_no" ]
       ] ],
       [ "debug", null, [

@@ -104,7 +104,8 @@ var hierarchy =
         [ "ob::core::NotImplementedException", "dc/db8/classob_1_1core_1_1_not_implemented_exception.html", null ],
         [ "ob::core::NotSupportedException", "d7/d8e/classob_1_1core_1_1_not_supported_exception.html", null ],
         [ "ob::core::OutOfRangeException", "d8/dc7/classob_1_1core_1_1_out_of_range_exception.html", null ],
-        [ "ob::core::PathNotFoundException", "d7/d3c/classob_1_1core_1_1_path_not_found_exception.html", null ]
+        [ "ob::core::PathNotFoundException", "d7/d3c/classob_1_1core_1_1_path_not_found_exception.html", null ],
+        [ "ob::core::XmlException", "dd/d9f/classob_1_1core_1_1_xml_exception.html", null ]
       ] ]
     ] ],
     [ "std::false_type", null, [
@@ -793,5 +794,8 @@ var hierarchy =
     [ "ob::platform::WindowDesc", "d3/d15/structob_1_1platform_1_1_window_desc.html", null ],
     [ "ob::platform::WindowEventArgs", "de/dad/structob_1_1platform_1_1_window_event_args.html", null ],
     [ "ob::engine::World", "d2/d11/classob_1_1engine_1_1_world.html", null ],
+    [ "ob::core::XmlNode", "d2/dfd/classob_1_1core_1_1_xml_node.html", [
+      [ "ob::core::Xml", "d8/dec/classob_1_1core_1_1_xml.html", null ]
+    ] ],
     [ "ob::core::YesNo< Tag >", "d8/d6c/classob_1_1core_1_1_yes_no.html", null ]
 ];
