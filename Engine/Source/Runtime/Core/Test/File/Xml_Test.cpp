@@ -158,11 +158,11 @@ TEST(Xml, Parse) {
 </html>
 )");
 
-	// 基本的なアクセス
-	EXPECT_TRUE(xml.has("html"));
-	EXPECT_TRUE(xml.at("html").has("body"));
+	// Xml自体がルート要素
+	EXPECT_EQ(xml.name, "html");
+	EXPECT_TRUE(xml.has("body"));
 
-	auto& body = xml.at("html").at("body");
+	auto& body = xml.at("body");
 	EXPECT_EQ(body.count("div"), 2u);
 	EXPECT_EQ(body.count("span"), 1u);
 
@@ -306,17 +306,18 @@ TEST(Xml, FileIO) {
 
 	{
 		Xml xml;
-		XmlNode& root = xml.add(XmlNode("config"));
-		root.add(XmlNode("setting", { {"key", "value1"} }));
-		root.add(XmlNode("setting", { {"key", "value2"} }));
+		xml.name = "config";
+		xml.add(XmlNode("setting", { {"key", "value1"} }));
+		xml.add(XmlNode("setting", { {"key", "value2"} }));
 		EXPECT_TRUE(xml.save(filename));
 	}
 
 	{
 		Xml xml;
 		EXPECT_TRUE(xml.load(filename));
+		EXPECT_EQ(xml.name, "config");
 		EXPECT_TRUE(xml.exists("/config"));
-		EXPECT_EQ(xml.find("/config")->count("setting"), 2u);
+		EXPECT_EQ(xml.count("setting"), 2u);
 		EXPECT_EQ(xml.find("/config/setting[1]")->attr("key"), "value1");
 		EXPECT_EQ(xml.find("/config/setting[2]")->attr("key"), "value2");
 	}
@@ -331,7 +332,7 @@ TEST(Xml, LoadNonexistentFile) {
 
 TEST(Xml, SaveWithoutPath) {
 	Xml xml;
-	xml.add(XmlNode("root"));
+	xml.name = "root";
 
 	// パスが設定されていない場合はfalse
 	EXPECT_FALSE(xml.save());
@@ -341,18 +342,18 @@ TEST(Xml, EmptyElement) {
 	Xml xml;
 	xml.parse(R"(<root><empty/><empty></empty></root>)");
 
-	auto* root = xml.find("/root");
-	ASSERT_NE(root, nullptr);
-	EXPECT_EQ(root->count("empty"), 2u);
+	EXPECT_EQ(xml.name, "root");
+	EXPECT_EQ(xml.count("empty"), 2u);
 }
 
 TEST(Xml, BuildXml) {
 	Xml xml;
-	XmlNode& root = xml.add(XmlNode("root"));
-	XmlNode& child = root.add(XmlNode("item", { {"id", "1"}, {"name", "first"} }));
+	xml.name = "root";
+	XmlNode& child = xml.add(XmlNode("item", { {"id", "1"}, {"name", "first"} }));
 	child.add(XmlNode("value")).attr("content") = "100";
 
 	// 確認
+	EXPECT_EQ(xml.name, "root");
 	EXPECT_TRUE(xml.exists("/root"));
 	EXPECT_TRUE(xml.exists("/root/item"));
 	EXPECT_EQ(xml.find("/root/item")->attr("id"), "1");

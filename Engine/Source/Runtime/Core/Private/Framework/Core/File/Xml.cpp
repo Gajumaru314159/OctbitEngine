@@ -687,14 +687,28 @@ namespace ob::core {
 		ctx.text = text;
 		ctx.pos = 0;
 
+		// 一時的なダミーノードにパース
+		XmlNode dummy;
 		while (ctx.pos < ctx.text.size()) {
 			ctx.skipWhitespace();
 			if (ctx.peek() == '\0') break;
-			if (!parseNode(ctx, *this)) {
+			if (!parseNode(ctx, dummy)) {
 				break;
 			}
 		}
 
+		// 最初の要素ノード（#commentや#text以外）をルートとして展開
+		for (auto& child : dummy.children) {
+			if (!child.name.empty() && child.name[0] != '#') {
+				// ルート要素をXml自体に展開
+				name = std::move(child.name);
+				attributes = std::move(child.attributes);
+				children = std::move(child.children);
+				return true;
+			}
+		}
+
+		// 要素ノードが見つからない場合は空のまま
 		return true;
 	}
 
@@ -718,6 +732,7 @@ namespace ob::core {
 		}
 
 		const XmlNode* current = this;
+		bool isFirst = true;
 
 		while (start < path.size()) {
 			// 次のセグメントを取得
@@ -733,12 +748,12 @@ namespace ob::core {
 			}
 
 			// インデックスを解析 [n]
-			String name;
+			String segmentName;
 			size_t index = 1;
 
 			size_t bracketPos = segment.find('[');
 			if (bracketPos != StringView::npos) {
-				name = String(segment.substr(0, bracketPos));
+				segmentName = String(segment.substr(0, bracketPos));
 				size_t bracketEnd = segment.find(']', bracketPos);
 				if (bracketEnd != StringView::npos) {
 					StringView indexStr = segment.substr(bracketPos + 1, bracketEnd - bracketPos - 1);
@@ -750,14 +765,27 @@ namespace ob::core {
 				}
 			}
 			else {
-				name = String(segment);
+				segmentName = String(segment);
+			}
+
+			// 最初のセグメントはXml自体の名前と比較
+			if (isFirst) {
+				isFirst = false;
+				if (this->name == segmentName) {
+					// Xml自体がマッチ
+					start = end + 1;
+					continue;
+				}
+				else {
+					return nullptr;
+				}
 			}
 
 			// 子ノードを検索
 			const XmlNode* found = nullptr;
 			size_t count = 0;
 			for (const auto& child : current->children) {
-				if (child.name == name) {
+				if (child.name == segmentName) {
 					++count;
 					if (count == index) {
 						found = &child;
